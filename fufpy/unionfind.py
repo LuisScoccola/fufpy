@@ -92,7 +92,7 @@ def unionfind_create(n_elements):
     res[0, :] = np.full(n_elements, 1, dtype=int)
     # parents
     res[1, :] = np.arange(n_elements, dtype=int)
-    # neighbors
+    # siblings
     res[2, :] = np.arange(n_elements, dtype=int)
     return res
 
@@ -110,7 +110,7 @@ def unionfind_find(uf, x):
 def unionfind_union(uf, x, y):
     sizes = uf[0]
     parents = uf[1]
-    neighbors = uf[2]
+    siblings = uf[2]
 
     xr = unionfind_find(uf, x)
     yr = unionfind_find(uf, y)
@@ -121,19 +121,19 @@ def unionfind_union(uf, x, y):
         xr, yr = yr, xr
     parents[yr] = xr
     sizes[xr] += sizes[yr]
-    neighbors[xr], neighbors[yr] = neighbors[yr], neighbors[xr]
+    siblings[xr], siblings[yr] = siblings[yr], siblings[xr]
     return True
 
 
 @nb.njit
 def unionfind_subset(uf, x):
-    neighbors = uf[2]
+    siblings = uf[2]
 
     result = [x]
-    nxt = neighbors[x]
-    while nxt != x:
-        result.append(nxt)
-        nxt = neighbors[nxt]
+    next_sibling = siblings[x]
+    while next_sibling != x:
+        result.append(next_sibling)
+        next_sibling = siblings[next_sibling]
     return np.array(result)
 
 
@@ -143,7 +143,7 @@ def unionfind_subsets(uf):
     visited = set()
     for x in range(uf.shape[1]):
         if x not in visited:
-            xset = unionfind_subset(uf, x)
-            visited.update(xset)
-            result.append(xset)
+            x_set = unionfind_subset(uf, x)
+            visited.update(x_set)
+            result.append(x_set)
     return result
