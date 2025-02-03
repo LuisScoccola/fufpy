@@ -1,6 +1,10 @@
 # FufPy: fast union-find in Python (with Numba)
 
-Implementation of union-find (aka disjoint-set) data structure, including retrieving the subset corresponding to an element, and all subsets.
+Implementation of union-find (aka disjoint-set) data structure.
+Currently, for performance, the structure is defined on a set $\{0, \dots, n-1\}$, of size $n$, which is specified at initialization.
+
+It implements the operations $union$, $find$, and $subset$, which returns the subset corresponding to an element.
+A main use case is [hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering).
 
 The implementation is inspired by `scipy`'s UnionFind module.
 
