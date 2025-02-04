@@ -2,9 +2,9 @@ import numba as nb
 import numpy as np
 
 
-class UnionFind:
+class DynamicPartition:
     def __init__(self, n_elements):
-        """Union-find (aka disjoint-set) on a set of integers `[0, ..., n-1]`.
+        """Dynamic partition of a set of integers `[0, ..., n-1]`.
 
         Parameters
         ----------
@@ -12,12 +12,12 @@ class UnionFind:
             The data structure represents a partition of `[0, ..., n_elements-1]`,
             which is initially the partition with each element belonging to a different subset.
         """
-        assert type(n_elements) == int, "n_elements must be a positive integer"
+        assert isinstance(n_elements, int), "n_elements must be a positive integer"
         assert n_elements > 0, "n_elements must be a positive integer"
         self._n_elements = n_elements
-        self._attributes = unionfind_create(n_elements)
+        self._attributes = dynamic_partition_create(n_elements)
 
-    def find(self, x):
+    def representative(self, x):
         """Find the current representative for the subset of `x`.
 
         Parameters
@@ -33,7 +33,7 @@ class UnionFind:
 
         """
         self._assert_element_in_structure(x)
-        return unionfind_find(self._attributes, x)
+        return dynamic_partition_representative(self._attributes, x)
 
     def union(self, x, y):
         """Merge the subsets of `x` and `y`.
@@ -50,7 +50,7 @@ class UnionFind:
         """
         self._assert_element_in_structure(x)
         self._assert_element_in_structure(y)
-        return unionfind_union(self._attributes, x, y)
+        return dynamic_partition_union(self._attributes, x, y)
 
     def subset(self, x):
         """All elements in the subset of `x`.
@@ -66,7 +66,7 @@ class UnionFind:
             All elements in the subset of `x`.
         """
         self._assert_element_in_structure(x)
-        return unionfind_subset(self._attributes, x)
+        return dynamic_partition_subset(self._attributes, x)
 
     def subsets(self):
         """All subsets.
@@ -76,17 +76,17 @@ class UnionFind:
         subsets : list[np.array(dtype=int)]
             All disjoint subsets in the data structure.
         """
-        return unionfind_subsets(self._attributes)
+        return dynamic_partition_subsets(self._attributes)
 
     def _assert_element_in_structure(self, x):
-        assert type(x) == int, "x must be an integer"
+        assert isinstance(x, int), "x must be an integer"
         assert x >= 0, "x must be a positive integer"
         assert (
             x < self._n_elements
         ), "x must be smaller than the number of elements in the union-find structure"
 
 
-def unionfind_create(n_elements):
+def dynamic_partition_create(n_elements):
     res = np.empty((4, n_elements), dtype=int)
     # sizes
     res[0, :] = np.full(n_elements, 1, dtype=int)
@@ -98,7 +98,7 @@ def unionfind_create(n_elements):
 
 
 @nb.njit
-def unionfind_find(uf, x):
+def dynamic_partition_representative(uf, x):
     parents = uf[1]
     while x != parents[x]:
         parents[x] = parents[parents[x]]
@@ -107,13 +107,13 @@ def unionfind_find(uf, x):
 
 
 @nb.njit
-def unionfind_union(uf, x, y):
+def dynamic_partition_union(uf, x, y):
     sizes = uf[0]
     parents = uf[1]
     siblings = uf[2]
 
-    xr = unionfind_find(uf, x)
-    yr = unionfind_find(uf, y)
+    xr = dynamic_partition_representative(uf, x)
+    yr = dynamic_partition_representative(uf, y)
     if xr == yr:
         return False
 
@@ -126,7 +126,7 @@ def unionfind_union(uf, x, y):
 
 
 @nb.njit
-def unionfind_subset(uf, x):
+def dynamic_partition_subset(uf, x):
     siblings = uf[2]
 
     result = [x]
@@ -138,12 +138,12 @@ def unionfind_subset(uf, x):
 
 
 @nb.njit
-def unionfind_subsets(uf):
+def dynamic_partition_subsets(uf):
     result = []
     visited = set()
     for x in range(uf.shape[1]):
         if x not in visited:
-            x_set = unionfind_subset(uf, x)
+            x_set = dynamic_partition_subset(uf, x)
             visited.update(x_set)
             result.append(x_set)
     return result
