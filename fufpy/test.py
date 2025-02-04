@@ -57,6 +57,29 @@ class TestUnionFind(unittest.TestCase):
 
         assert set(uf.subset(0)) == {0, 1, 2, 3, 7, 8, 9}
 
+    def test_parts(self):
+        """Check that the parts in the partition are correct."""
+
+        n_elements = 10
+        uf = DynamicPartition(n_elements)
+
+        uf.union(0, 1)
+        uf.union(1, 2)
+        uf.union(0, 3)
+        uf.union(8, 9)
+        uf.union(9, 7)
+        uf.union(8, 0)
+
+        uf.union(4, 5)
+
+        parts = uf.parts()
+        assert len(parts) == 3
+
+        expected_parts = [{6}, {4, 5}, {0, 1, 2, 3, 7, 8, 9}]
+
+        for subset in parts:
+            assert set(subset) in expected_parts
+
 
 if __name__ == "__main__":
     unittest.main()

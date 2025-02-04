@@ -68,8 +68,8 @@ class DynamicPartition:
         self._assert_element_in_structure(x)
         return dynamic_partition_subset(self._attributes, x)
 
-    def subsets(self):
-        """All subsets.
+    def parts(self):
+        """Parts of the partition.
 
         Returns
         -------
@@ -140,10 +140,12 @@ def dynamic_partition_subset(uf, x):
 @nb.njit
 def dynamic_partition_subsets(uf):
     result = []
-    visited = set()
-    for x in range(uf.shape[1]):
-        if x not in visited:
+    n_elements = uf.shape[1]
+    visited = np.full(n_elements, False)
+    for x in range(n_elements):
+        xr = dynamic_partition_representative(uf, x)
+        if not visited[xr]:
+            visited[xr] = True
             x_set = dynamic_partition_subset(uf, x)
-            visited.update(x_set)
             result.append(x_set)
     return result
