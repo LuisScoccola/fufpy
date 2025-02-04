@@ -76,7 +76,7 @@ class DynamicPartition:
         subsets : list[np.array(dtype=int)]
             All disjoint subsets in the data structure.
         """
-        return dynamic_partition_subsets(self._attributes)
+        return dynamic_partition_parts(self._attributes)
 
     def _assert_element_in_structure(self, x):
         assert isinstance(x, int), "x must be an integer"
@@ -138,7 +138,7 @@ def dynamic_partition_subset(uf, x):
 
 
 @nb.njit
-def dynamic_partition_subsets(uf):
+def dynamic_partition_parts(uf):
     result = []
     n_elements = uf.shape[1]
     visited = np.full(n_elements, False)
