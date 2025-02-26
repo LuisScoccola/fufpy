@@ -26,9 +26,8 @@ jobs:
       - name: Build doc
         shell: bash
         run: |
-          pip install multipers sphinxcontrib-bibtex myst-nb sphinx_rtd_theme
+          pip install sphinx sphinx_rtd_theme
           cd docs
-          sh build_doc.sh
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
