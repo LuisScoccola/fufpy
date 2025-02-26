@@ -10,7 +10,7 @@ The implementation is inspired by `scipy`'s UnionFind module, and it relies on `
 
 ## Installing
 
-Run `pip install .` from the root directory of the project.
+Use `pip install fufpy`, or `pip install .` from the root directory of the project.
 
 ## Dependencies
 
