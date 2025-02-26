@@ -27,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
       - name: Run test
         run: |
-          pytest .
+          python -m unittest fufpy/test.py
 
   test-windows:
     runs-on: windows-latest
@@ -49,4 +49,4 @@ jobs:
       - name: Run test
         shell: bash -l {0}
         run: |
-          pytest .
+          python -m unittest fufpy/test.py
