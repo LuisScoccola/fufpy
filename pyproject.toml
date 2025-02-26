@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "fufpy"
 dynamic = ["version"]
+description = "Fast union-find in Python"
 readme = "README.md"
 authors = [
     { name = "Luis Scoccola", email = "luis.scoccola@gmail.com" },
