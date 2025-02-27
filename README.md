@@ -16,6 +16,10 @@ Use `pip install fufpy`, or `pip install .` from the root directory of the proje
 
 This package depends on `numpy` and `numba`, which will be installed automatically when installing via `pip`.
 
+## Documentation
+
+The documentation, including API, can be found [here](https://luisscoccola.com/fufpy/).
+
 ## License
 
 This software is published under the 3-clause BSD license.
