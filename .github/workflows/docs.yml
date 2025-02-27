@@ -27,6 +27,7 @@ jobs:
         shell: bash
         run: |
           pip install sphinx sphinx_rtd_theme
+          pip install .
           cd docs
           sphinx-build -b html . _build/html
       - name: Setup Pages
