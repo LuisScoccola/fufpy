@@ -34,11 +34,17 @@ Index
     fufpy.dynamic_partition_parts
 
 
-Details
--------
+DynamicPartition class
+----------------------
 
 .. autoclass:: fufpy.DynamicPartition
     :members:
 
-.. autoclass:: fufpy
-    :members:
+Functions
+---------
+
+.. autofunction:: fufpy.dynamic_partition_create
+.. autofunction:: fufpy.dynamic_partition_representative
+.. autofunction:: fufpy.dynamic_partition_union
+.. autofunction:: fufpy.dynamic_partition_subset
+.. autofunction:: fufpy.dynamic_partition_parts

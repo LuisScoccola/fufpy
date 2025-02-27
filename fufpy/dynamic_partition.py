@@ -179,6 +179,7 @@ def dynamic_partition_subset(uf: np.array, x: int) -> np.array:
     uf : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     x : integer
+        Element for which to find subset.
 
     Returns
     -------
