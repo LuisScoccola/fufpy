@@ -12,13 +12,13 @@ class DynamicPartition:
         which is initially the partition with each element belonging to a different subset.
     """
 
-    def __init__(self, n_elements):
+    def __init__(self, n_elements: int):
         assert isinstance(n_elements, int), "n_elements must be a positive integer"
         assert n_elements > 0, "n_elements must be a positive integer"
         self._n_elements = n_elements
         self._attributes = dynamic_partition_create(n_elements)
 
-    def representative(self, x):
+    def representative(self, x: int) -> int:
         """Find the current representative for the subset containing `x`.
 
         Parameters
@@ -36,7 +36,7 @@ class DynamicPartition:
         self._assert_element_in_structure(x)
         return dynamic_partition_representative(self._attributes, x)
 
-    def union(self, x, y):
+    def union(self, x: int, y: int) -> bool:
         """Merge the subsets of `x` and `y`.
 
         Parameters
@@ -53,7 +53,7 @@ class DynamicPartition:
         self._assert_element_in_structure(y)
         return dynamic_partition_union(self._attributes, x, y)
 
-    def subset(self, x):
+    def subset(self, x: int) -> np.array:
         """Elements in the subset containing `x`.
 
         Parameters
@@ -69,7 +69,7 @@ class DynamicPartition:
         self._assert_element_in_structure(x)
         return dynamic_partition_subset(self._attributes, x)
 
-    def parts(self):
+    def parts(self) -> list[np.array]:
         """Parts of the partition.
 
         Returns
@@ -79,7 +79,7 @@ class DynamicPartition:
         """
         return dynamic_partition_parts(self._attributes)
 
-    def _assert_element_in_structure(self, x):
+    def _assert_element_in_structure(self, x: int) -> None:
         assert isinstance(x, int), "x must be an integer"
         assert x >= 0, "x must be a positive integer"
         assert (
@@ -87,7 +87,7 @@ class DynamicPartition:
         ), "x must be smaller than the number of elements in the union-find structure"
 
 
-def dynamic_partition_create(n_elements):
+def dynamic_partition_create(n_elements: int) -> np.array:
     """
     Create a dynamic partition with `n_elements` elements.
 
@@ -95,7 +95,7 @@ def dynamic_partition_create(n_elements):
     ----------
     n_elements : integer
         The number of elements in the set.
-    
+
     Returns
     -------
     dynamic_partition : np.array(shape=(3, n_elements), dtype=int)
@@ -112,7 +112,7 @@ def dynamic_partition_create(n_elements):
 
 
 @nb.njit
-def dynamic_partition_representative(uf, x):
+def dynamic_partition_representative(uf: np.array, x: int) -> int:
     """
     Find the current representative for the subset containig `x`.
 
@@ -122,7 +122,7 @@ def dynamic_partition_representative(uf, x):
         The dynamic partition data structure.
     x : integer
         Element for which to find the representative.
-    
+
     Returns
     -------
     representative : integer
@@ -136,7 +136,7 @@ def dynamic_partition_representative(uf, x):
 
 
 @nb.njit
-def dynamic_partition_union(uf, x, y):
+def dynamic_partition_union(uf: np.array, x: int, y: int) -> bool:
     """
     Merge the subsets containing `x` and `y`.
 
@@ -146,7 +146,7 @@ def dynamic_partition_union(uf, x, y):
         The dynamic partition data structure.
     x, y : integers
         Elements to merge.
-    
+
     Returns
     -------
     merged : bool
@@ -170,7 +170,7 @@ def dynamic_partition_union(uf, x, y):
 
 
 @nb.njit
-def dynamic_partition_subset(uf, x):
+def dynamic_partition_subset(uf: np.array, x: int) -> np.array:
     """
     Elements in the subset containing `x`.
 
@@ -196,7 +196,7 @@ def dynamic_partition_subset(uf, x):
 
 
 @nb.njit
-def dynamic_partition_parts(uf):
+def dynamic_partition_parts(uf: np.array) -> list[np.array]:
     """
     Parts of the partition.
 
