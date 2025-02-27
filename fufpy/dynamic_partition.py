@@ -98,10 +98,10 @@ def dynamic_partition_create(n_elements):
     
     Returns
     -------
-    dynamic_partition : np.array(shape=(4, n_elements), dtype=int)
+    dynamic_partition : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     """
-    res = np.empty((4, n_elements), dtype=int)
+    res = np.empty((3, n_elements), dtype=int)
     # Sizes.
     res[0, :] = np.full(n_elements, 1, dtype=int)
     # Parents.
@@ -118,7 +118,7 @@ def dynamic_partition_representative(uf, x):
 
     Parameters
     ----------
-    uf : np.array(shape=(4, n_elements), dtype=int)
+    uf : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     x : integer
         Element for which to find the representative.
@@ -142,7 +142,7 @@ def dynamic_partition_union(uf, x, y):
 
     Parameters
     ----------
-    uf : np.array(shape=(4, n_elements), dtype=int)
+    uf : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     x, y : integers
         Elements to merge.
@@ -176,7 +176,7 @@ def dynamic_partition_subset(uf, x):
 
     Parameters
     ----------
-    uf : np.array(shape=(4, n_elements), dtype=int)
+    uf : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     x : integer
 
@@ -202,7 +202,7 @@ def dynamic_partition_parts(uf):
 
     Parameters
     ----------
-    uf : np.array(shape=(4, n_elements), dtype=int)
+    uf : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
 
     Returns
