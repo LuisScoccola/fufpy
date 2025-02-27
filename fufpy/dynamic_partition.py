@@ -3,22 +3,23 @@ import numpy as np
 
 
 class DynamicPartition:
-    def __init__(self, n_elements):
-        """Dynamic partition of a set of integers `[0, ..., n-1]`.
+    """Dynamic partition of a set of integers `[0, ..., n-1]`.
 
-        Parameters
-        ----------
-        n_elements : integer
-            The data structure represents a partition of `[0, ..., n_elements-1]`,
-            which is initially the partition with each element belonging to a different subset.
-        """
+    Parameters
+    ----------
+    n_elements : integer
+        The data structure represents a partition of `[0, ..., n_elements-1]`,
+        which is initially the partition with each element belonging to a different subset.
+    """
+
+    def __init__(self, n_elements):
         assert isinstance(n_elements, int), "n_elements must be a positive integer"
         assert n_elements > 0, "n_elements must be a positive integer"
         self._n_elements = n_elements
         self._attributes = dynamic_partition_create(n_elements)
 
     def representative(self, x):
-        """Find the current representative for the subset of `x`.
+        """Find the current representative for the subset containing `x`.
 
         Parameters
         ----------
@@ -53,7 +54,7 @@ class DynamicPartition:
         return dynamic_partition_union(self._attributes, x, y)
 
     def subset(self, x):
-        """All elements in the subset of `x`.
+        """Elements in the subset containing `x`.
 
         Parameters
         ----------
@@ -87,18 +88,46 @@ class DynamicPartition:
 
 
 def dynamic_partition_create(n_elements):
+    """
+    Create a dynamic partition with `n_elements` elements.
+
+    Parameters
+    ----------
+    n_elements : integer
+        The number of elements in the set.
+    
+    Returns
+    -------
+    dynamic_partition : np.array(shape=(4, n_elements), dtype=int)
+        The dynamic partition data structure.
+    """
     res = np.empty((4, n_elements), dtype=int)
-    # sizes
+    # Sizes.
     res[0, :] = np.full(n_elements, 1, dtype=int)
-    # parents
+    # Parents.
     res[1, :] = np.arange(n_elements, dtype=int)
-    # siblings
+    # Siblings.
     res[2, :] = np.arange(n_elements, dtype=int)
     return res
 
 
 @nb.njit
 def dynamic_partition_representative(uf, x):
+    """
+    Find the current representative for the subset containig `x`.
+
+    Parameters
+    ----------
+    uf : np.array(shape=(4, n_elements), dtype=int)
+        The dynamic partition data structure.
+    x : integer
+        Element for which to find the representative.
+    
+    Returns
+    -------
+    representative : integer
+        The representative of the subset containing `x`.
+    """
     parents = uf[1]
     while x != parents[x]:
         parents[x] = parents[parents[x]]
@@ -108,6 +137,21 @@ def dynamic_partition_representative(uf, x):
 
 @nb.njit
 def dynamic_partition_union(uf, x, y):
+    """
+    Merge the subsets containing `x` and `y`.
+
+    Parameters
+    ----------
+    uf : np.array(shape=(4, n_elements), dtype=int)
+        The dynamic partition data structure.
+    x, y : integers
+        Elements to merge.
+    
+    Returns
+    -------
+    merged : bool
+        True if `x` and `y` were in disjoint sets, False otherwise.
+    """
     sizes = uf[0]
     parents = uf[1]
     siblings = uf[2]
@@ -127,6 +171,20 @@ def dynamic_partition_union(uf, x, y):
 
 @nb.njit
 def dynamic_partition_subset(uf, x):
+    """
+    Elements in the subset containing `x`.
+
+    Parameters
+    ----------
+    uf : np.array(shape=(4, n_elements), dtype=int)
+        The dynamic partition data structure.
+    x : integer
+
+    Returns
+    -------
+    subset : np.array(dtype=int)
+        All elements in the subset containing `x`.
+    """
     siblings = uf[2]
 
     result = [x]
@@ -139,6 +197,19 @@ def dynamic_partition_subset(uf, x):
 
 @nb.njit
 def dynamic_partition_parts(uf):
+    """
+    Parts of the partition.
+
+    Parameters
+    ----------
+    uf : np.array(shape=(4, n_elements), dtype=int)
+        The dynamic partition data structure.
+
+    Returns
+    -------
+    subsets : list[np.array(dtype=int)]
+        All disjoint subsets in the data structure.
+    """
     result = []
     n_elements = uf.shape[1]
     visited = np.full(n_elements, False)
