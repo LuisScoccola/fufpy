@@ -87,6 +87,7 @@ class DynamicPartition:
         ), "x must be smaller than the number of elements in the union-find structure"
 
 
+@nb.njit
 def dynamic_partition_create(n_elements: int) -> np.array:
     """
     Create a dynamic partition with `n_elements` elements.
@@ -101,13 +102,13 @@ def dynamic_partition_create(n_elements: int) -> np.array:
     dynamic_partition : np.array(shape=(3, n_elements), dtype=int)
         The dynamic partition data structure.
     """
-    res = np.empty((3, n_elements), dtype=int)
+    res = np.empty((3, n_elements), dtype=np.int_)
     # Sizes.
-    res[0, :] = np.full(n_elements, 1, dtype=int)
+    res[0, :] = np.full(n_elements, 1, dtype=np.int_)
     # Parents.
-    res[1, :] = np.arange(n_elements, dtype=int)
+    res[1, :] = np.arange(n_elements, dtype=np.int_)
     # Siblings.
-    res[2, :] = np.arange(n_elements, dtype=int)
+    res[2, :] = np.arange(n_elements, dtype=np.int_)
     return res
 
 
